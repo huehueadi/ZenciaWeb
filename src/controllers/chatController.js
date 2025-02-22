@@ -90,24 +90,29 @@ const formatScrapedDataForAI = (scrapedData, userQuery, chatHistory) => {
 };
 
 
-export const fetchDataFromLocalFile = async (fileUrl) => {
 
-  console.log("file", fileUrl)
+// Use import.meta.url to get the directory in ES modules
+export const fetchDataFromLocalFile = async (fileUrl) => {
+  console.log("file", fileUrl);
+
   if (!fileUrl) {
     throw new Error('fileUrl is undefined or empty');
   }
 
   try {
-    // Assuming the file is stored in the 'scraped_json' directory within your project
-   // Update this path if necessary
-
     // Remove 'file://' prefix if present
     if (fileUrl.startsWith('file://')) {
       fileUrl = fileUrl.slice(7);
     }
 
-    // Create the absolute file path by joining the directory with the fileUrl
-    const filePath = path.join(fileUrl);
+    // Use import.meta.url to determine base directory
+    const baseDirectory = path.resolve(process.cwd(), 'src', 'scraped_files'); // Works for both local and production
+
+
+    // Now construct the full file path
+    const filePath = path.join(baseDirectory, fileUrl); // Join base directory with the file URL
+
+    console.log('Resolved file path:', filePath); // Debugging log
 
     // Ensure file path is valid
     if (!fs.existsSync(filePath)) {
@@ -142,7 +147,7 @@ export const fetchDataFromLocalFile = async (fileUrl) => {
         throw new Error('No valid paragraphs or links found in the local file data.');
       }
     } else if (typeof scrapedData === 'object') {
-      return JSON.stringify(scrapedData); 
+      return JSON.stringify(scrapedData);
     } else {
       throw new Error('Local file data format is not recognized.');
     }
@@ -151,6 +156,7 @@ export const fetchDataFromLocalFile = async (fileUrl) => {
     throw new Error('Failed to fetch data from local file: ' + error.message);
   }
 };
+
 
 
 
