@@ -20,6 +20,8 @@ app.use(cookieParser());
 connectDB()
 // Routes
 app.use('/v1', router);    
+app.use(express.static("views"));
+
 
 app.get('/',(req, res)=>{
   res.send("Hello World")

@@ -5,22 +5,25 @@ import { getUnansweredQuestionsController } from '../controllers/authUnansweredQ
 import { loginChatbot, registerChatbot } from '../controllers/authUserController.js';
 import { handleChat } from '../controllers/chatController.js';
 // import { scrapeWebsiteController } from '../controllers/scrapingController.js';
-import authentication from '../middleware/authenticationMiddleware.js';
 import { fetchChatsBySession, fetchSessionsByChatbotId } from '../controllers/SessionController.js';
-import { cheerioscrapeWebsiteController } from '../controllers/cherioController.js';
-import { puppeteerScrapeWebsiteController } from '../controllers/scrapingController.js';
+import { actionController, permissionController } from '../controllers/authActionController.js';
 import { adminMostAskedQuestionsController, deleteChatbot, deleteUser, getAllChatbots, getAllUsers, getChatbotById, getStats, getUserById, updateChatbot, updateUser } from '../controllers/authAdminController.js';
 import { getDashboardOptions } from '../controllers/authGetDashboardOptions.js';
 import { getRetentionData } from '../controllers/authRetentionController.js';
-import { getTotalMessagesForChatbot } from '../controllers/authTotalMessagesController.js';
-import { actionController, permissionController } from '../controllers/authActionController.js';
 import { createRole } from '../controllers/authRoleController.js';
+import { getTotalMessagesForChatbot } from '../controllers/authTotalMessagesController.js';
+import { cheerioscrapeWebsiteController } from '../controllers/cherioController.js';
+import { getHomePage } from '../controllers/rauthrenderchatbot.js';
+import { puppeteerScrapeWebsiteController } from '../controllers/scrapingController.js';
+import authentication from '../middleware/authenticationMiddleware.js';
 // import { testChat } from '../controllers/testChat.js';
 
 
 const router = express.Router();
 
 router.post('/chat/:userid', handleChat);
+
+router.get('/chat-bot/:userid', getHomePage)
 // router.post('/testchat/:userid', testChat);
 
 // router.post('/chat', generateContentFromUserInput);
