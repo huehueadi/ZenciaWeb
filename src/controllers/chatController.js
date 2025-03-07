@@ -5,7 +5,9 @@ import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import Chat from '../models/chatModel.js';
 import ScrapedData from '../models/scrappedDataModel.js';
+import ChatbotModel from '../models/userModel.js';
 import { generateResponse } from '../services/aiService.js';
+
 
 dotenv.config();
 
@@ -34,7 +36,23 @@ export const handleChat = async (req, res) => {
     if (!session_id) {
       session_id = generateSessionId();
     }
+    const user = await ChatbotModel.findOne({ userid });
 
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        success: false
+      });
+    }
+  
+   
+    if (!user.isActiveTrial && user.payment === "No" ) {
+      return res.status(400).json({
+        message: "Trial validity is expired or Payment is not Done",
+        success: false
+      });
+    }
+  
     const scrapedDataRecord = await ScrapedData.findOne({ userid });
     console.log("file url", scrapedDataRecord.fileUrl)
     if (!scrapedDataRecord) {
@@ -48,19 +66,15 @@ export const handleChat = async (req, res) => {
     }
 
     const previousChats = await Chat.find({ session_id })
-      .sort({ createdAt: 1 }) // Sort in order of chat history
-      .limit(5); // Limit messages to avoid exceeding token limits
+      .sort({ createdAt: 1 })
+      .limit(5); 
 
-    // Format previous chat messages
     let chatHistory = previousChats.map(chat => `User: ${chat.user_message}\nBot: ${chat.bot_response}`).join("\n\n");
 
-    // Format final prompt for AI model
     const formattedPrompt = formatScrapedDataForAI(s3Data, message, chatHistory);
 
-    // Generate response using AI
     const botResponse = await generateResponse(formattedPrompt);
 
-    // Save chat history to database
     const chatLog = new Chat({
       user_message: message,
       bot_response: botResponse,
