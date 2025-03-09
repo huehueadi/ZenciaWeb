@@ -29,10 +29,8 @@ export const generateResponse = async (message) => {
 };
 
 
-// aiService.js
 export const generateResponseFromContext = async (message, context) => {
   try {
-    // Process the context and message to generate a response using your AI model (Gemini, etc.)
     const response = await generateGeminiResponse(message, context);
     return response;
   } catch (error) {
