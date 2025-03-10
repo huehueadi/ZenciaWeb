@@ -6,7 +6,7 @@ const containsContactInfo = (message) => {
   return phoneRegex.test(message) || emailRegex.test(message);
 };
 
-const checkSessionsForContactInfo = async (req, res) => {
+export const checkSessionsForContactInfo = async (req, res) => {
   const { chatbotId } = req.params;
 
   try {
@@ -36,4 +36,3 @@ const checkSessionsForContactInfo = async (req, res) => {
   }
 };
 
-export { checkSessionsForContactInfo };

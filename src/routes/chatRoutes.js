@@ -16,6 +16,7 @@ import { cheerioscrapeWebsiteController } from '../controllers/cherioController.
 import { getHomePage } from '../controllers/rauthrenderchatbot.js';
 import { puppeteerScrapeWebsiteController } from '../controllers/scrapingController.js';
 import authentication from '../middleware/authenticationMiddleware.js';
+import { checkSessionsForContactInfo } from '../controllers/authUserContactController.js';
 // import { testChat } from '../controllers/testChat.js';
 
 
@@ -62,6 +63,8 @@ router.get('/admin/chatbots/:id',authentication('admin'), getChatbotById);
 router.delete('/admin/users/:id',authentication('admin'), deleteUser);           
 router.delete('/admin/chatbots/:id',authentication('admin'), deleteChatbot);     
 router.put('/admin/users/:id',authentication('admin'), updateUser);              
-router.put('/admin/chatbots/:id',authentication('admin'), updateChatbot);        
+router.put('/admin/chatbots/:id',authentication('admin'), updateChatbot); 
+
+router.get('/check-sessions/:chatbotId', checkSessionsForContactInfo);
 
 export default router;
