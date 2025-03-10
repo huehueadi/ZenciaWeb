@@ -5,23 +5,23 @@ export const getDashboardOptions = (req, res) => {
     return res.status(200).json({
       success: true,
       options: [
-        { name: "Dashboards", link: "/admin/dashboard" },
-        { name: "Users", link: "/admin/users" },
-        { name: "Chat Logs", link: "/admin/chat-logs" },
-        { name: "Roles", link: "/admin/roles" },
+        { name: "Dashboards", link: "/admin/dashboard", icon: "FaTachometerAlt" },
+        { name: "Users", link: "/admin/users", icon: "FaUserCog" },
+        { name: "Chat Logs", link: "/admin/chat-logs", icon: "FaClipboardList" },
+        { name: "Roles", link: "/admin/roles", icon: "FaUserTag" },
       ],
     });
   } else if (role === "user") {
     return res.status(200).json({
       success: true,
       options: [
-        { name: "Dashboards", link: "/dashboard" },
-        { name: "Get ChatBot", link: "/get-chatbot" },
-        { name: "Chats", link: "/chats" },
-        { name: "Analytics", link: "/analytics" },
-        { name: "Train Agent", link: "/training" },
-        { name: "Leads", link: "/leads" },
-        { name: "User feedback", link: "/user-feedback" },
+        { name: "Dashboards", link: "/dashboard", icon: "FaTachometerAlt" },
+        { name: "Get ChatBot", link: "/get-chatbot", icon: "FaRobot" },
+        { name: "Chats", link: "/chats", icon: "FaComments" },
+        // { name: "Analytics", link: "/analytics", icon: "FaChartBar" },
+        { name: "Train Agent", link: "/training", icon: "FaGlobeAmericas" },
+        { name: "Leads", link: "/leads", icon: "FaUserFriends" },
+        { name: "User feedback", link: "/user-feedback", icon: "FaCommentDots" },
       ],
     });
   } else {

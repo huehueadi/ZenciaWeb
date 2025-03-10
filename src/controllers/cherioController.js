@@ -112,35 +112,32 @@ const crawlWebsite = async (baseUrl, domain) => {
 
 
 const uploadDataToLocal = async (data, userId) => {
-  const jsonData = JSON.stringify(data, null, 2);  // Pretty print JSON with 2 spaces
-  const fileName = `scraped_data_${Date.now()}.json`;  // Generate a unique file name
+  const jsonData = JSON.stringify(data, null, 2);  
+  const fileName = `scraped_data_${Date.now()}.json`;  
 
   // Get the directory path using import.meta.url
-  const __dirname = path.dirname(new URL(import.meta.url).pathname);  // Get current directory from import.meta.url
+  const __dirname = path.dirname(new URL(import.meta.url).pathname);  
 
-  const directoryPath = path.join(__dirname, 'scraped_files');  // Define the directory path
+  const directoryPath = path.join(__dirname, '..', 'scraped_files');  
 
   try {
-    // Ensure the directory exists, create if it doesn't
     fs.mkdirSync(directoryPath, { recursive: true });
 
     // Define the full file path
     const filePath = path.join(directoryPath, fileName);
 
-    // Write the scraped data to the local file system
     fs.writeFileSync(filePath, jsonData);
     console.log('File saved successfully to local system:', filePath);
 
-    const fileUrl = `file://${filePath}`;  // File URL to be saved to the database
     const scrapedData = new ScrapedData({
       userid: userId,  
-      fileUrl: fileUrl,  // Save the file path
+      fileUrl: fileName,  
       uuid: uuidv4(),
     });
 
     await scrapedData.save();
 
-    return fileUrl;  // Return the file URL or file path
+    return fileName;  
   } catch (error) {
     console.error('Error saving data locally:', error);
     throw error;
@@ -625,5 +622,3 @@ export const cheerioscrapeWebsiteController = async (req, res) => {
 //     res.status(500).json({ error: "Scraping failed", message: error.message });
 //   }
 // };
-
-
