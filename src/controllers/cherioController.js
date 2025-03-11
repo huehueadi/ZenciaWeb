@@ -58,11 +58,21 @@ const scrapeBodyContent = async (url, domain) => {
     // Load the page with cheerio
     const $ = cheerio.load(decodedData);
 
+    // Extract paragraphs
     const paragraphs = new Set();
     $('p').each((index, element) => {
       const paragraphText = $(element).text().trim();
       if (paragraphText.length > 0) {
         paragraphs.add(paragraphText);  // Only add non-empty paragraphs
+      }
+    });
+
+    // Extract span content
+    const spans = new Set();
+    $('span').each((index, element) => {
+      const spanText = $(element).text().trim();
+      if (spanText.length > 0) {
+        spans.add(spanText);  // Only add non-empty spans
       }
     });
 
@@ -76,7 +86,12 @@ const scrapeBodyContent = async (url, domain) => {
       }
     });
 
-    return { url, paragraphs: Array.from(paragraphs), links: Array.from(links) };
+    return { 
+      url, 
+      paragraphs: Array.from(paragraphs), 
+      spans: Array.from(spans), // Add spans to the returned data
+      links: Array.from(links) 
+    };
 
   } catch (error) {
     console.error(`Error scraping ${url}: ${error.message}`);
@@ -150,6 +165,7 @@ const scrapeAllPagesConcurrently = async (baseUrl, domain) => {
   visitedUrls.add(baseUrl);  
   const allScrapedData = {
     paragraphs: new Set(),
+    spans: new Set(), // Add spans set
     links: new Set(),
     urls: new Set(),
   };
@@ -163,6 +179,10 @@ const scrapeAllPagesConcurrently = async (baseUrl, domain) => {
     successfulResults.forEach(result => {
       totalScrapedPages++;
       result.paragraphs.forEach(paragraph => allScrapedData.paragraphs.add(paragraph));
+      // Add spans to the collected data
+      if (result.spans) {
+        result.spans.forEach(span => allScrapedData.spans.add(span));
+      }
       result.links.forEach(link => allScrapedData.links.add(link));
       allScrapedData.urls.add(result.url);
 
@@ -181,6 +201,7 @@ const scrapeAllPagesConcurrently = async (baseUrl, domain) => {
 
   return {
     paragraphs: Array.from(allScrapedData.paragraphs),
+    spans: Array.from(allScrapedData.spans), // Include spans in the return object
     links: Array.from(allScrapedData.links),
     urls: Array.from(allScrapedData.urls),
   };
