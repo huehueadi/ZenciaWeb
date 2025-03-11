@@ -89,7 +89,7 @@ const formatScrapedDataForAI = (scrapedData, userQuery, chatHistory) => {
   const formattedText = Array.isArray(scrapedData) ? scrapedData.join("\n\n") : scrapedData;
   
   // Create a system prompt that introduces Zencia
-  const systemPrompt = "You are Zencia, an AI assistant powered by Gemini. You provide helpful, accurate, and friendly responses based on the website data provided.";
+  const systemPrompt = "You are Zencia, an AI assistant developed by Zencia Team. You provide helpful, accurate, and friendly responses based on the website data provided.";
   
   // Construct the full prompt with the system information, website data, chat history, and user query
   return `${systemPrompt}
