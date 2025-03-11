@@ -85,11 +85,22 @@ export const handleChat = async (req, res) => {
 
 // Format data for AI (optimized)
 const formatScrapedDataForAI = (scrapedData, userQuery, chatHistory) => {
+  // Convert scraped data to a string if it's an array
   const formattedText = Array.isArray(scrapedData) ? scrapedData.join("\n\n") : scrapedData;
-  return `Summarized website data: ${formattedText}
+  
+  // Create a system prompt that introduces Zencia
+  const systemPrompt = "You are Zencia, an AI assistant powered by Gemini. You provide helpful, accurate, and friendly responses based on the website data provided.";
+  
+  // Construct the full prompt with the system information, website data, chat history, and user query
+  return `${systemPrompt}
+
+Summarized website data: ${formattedText}
+
 Recent chat: ${chatHistory ? chatHistory.slice(-200) : 'None'}
+
 User query: ${userQuery}
-Generate response: `;
+
+Generate response as Zencia: `;
 };
 
 // Fetch data from local file (optimized)
